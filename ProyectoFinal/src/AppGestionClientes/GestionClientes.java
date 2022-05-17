@@ -1,9 +1,13 @@
+package AppGestionClientes;
+
 
 import java.util.Scanner;
 
+import DbManager.DBManager;
+
 /**
  *
- * @author lionel
+ * @author Jose Antonio López Romero
  */
 public class GestionClientes {
 
@@ -20,6 +24,8 @@ public class GestionClientes {
         DBManager.close();
 
     }
+    
+    //Funcion con el menu principal
 
     public static boolean menuPrincipal() {
         System.out.println("");
@@ -32,7 +38,7 @@ public class GestionClientes {
         
         Scanner in = new Scanner(System.in);
             
-        int opcion = pideInt("Elige una opciÃ³n: ");
+        int opcion = pideInt("Elige una opción: ");
         
         switch (opcion) {
             case 1:
@@ -50,7 +56,7 @@ public class GestionClientes {
             case 5:
                 return true;
             default:
-                System.out.println("OpciÃ³n elegida incorrecta");
+                System.out.println("Opción elegida incorrecta");
                 return false;
         }
         
@@ -66,7 +72,7 @@ public class GestionClientes {
                 //in.nextLine();
                 return valor;
             } catch (Exception e) {
-                System.out.println("No has introducido un nÃºmero entero. Vuelve a intentarlo.");
+                System.out.println("No has introducido un número entero. Vuelve a intentarlo.");
             }
         }
     }
@@ -95,7 +101,7 @@ public class GestionClientes {
 
         System.out.println("Introduce los datos del nuevo cliente:");
         String nombre = pideLinea("Nombre: ");
-        String direccion = pideLinea("DirecciÃ³n: ");
+        String direccion = pideLinea("Dirección: ");
 
         boolean res = DBManager.insertCliente(nombre, direccion);
 

@@ -1,3 +1,4 @@
+package DbManager;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -7,24 +8,24 @@ import java.sql.ResultSet;
 
 /**
  *
- * @author lionel
+ * @author Jose Antonio L髉ez Romero
  */
 public class DBManager {
 
-    // Conexi贸n a la base de datos
+    // Conexi髇 a la base de datos
     private static Connection conn = null;
 
-    // Configuraci贸n de la conexi贸n a la base de datos
+    // Configuraci髇 de la conexi髇 a la base de datos
     private static final String DB_HOST = "localhost";
     private static final String DB_PORT = "3306";
     private static final String DB_NAME = "tienda";
     private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?serverTimezone=UTC";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
-    private static final String DB_MSQ_CONN_OK = "CONEXI脫N CORRECTA";
-    private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXI脫N";
+    private static final String DB_MSQ_CONN_OK = "CONEXI覰 CORRECTA";
+    private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXI覰";
 
-    // Configuraci贸n de la tabla Clientes
+    // Configuraci髇 de la tabla Clientes
     private static final String DB_CLI = "clientes";
     private static final String DB_CLI_SELECT = "SELECT * FROM " + DB_CLI;
     private static final String DB_CLI_ID = "id";
@@ -32,7 +33,7 @@ public class DBManager {
     private static final String DB_CLI_DIR = "direccion";
 
     //////////////////////////////////////////////////
-    // M脡TODOS DE CONEXI脫N A LA BASE DE DATOS
+    // M蒚ODOS DE CONEXI覰 A LA BASE DE DATOS
     //////////////////////////////////////////////////
     ;
     
@@ -73,12 +74,12 @@ public class DBManager {
     }
 
     /**
-     * Comprueba la conexi贸n y muestra su estado por pantalla
+     * Comprueba la conexi髇 y muestra su estado por pantalla
      *
-     * @return true si la conexi贸n existe y es v谩lida, false en caso contrario
+     * @return true si la conexi髇 existe y es v醠ida, false en caso contrario
      */
     public static boolean isConnected() {
-        // Comprobamos estado de la conexi贸n
+        // Comprobamos estado de la conexi髇
         try {
             if (conn != null && conn.isValid(0)) {
                 System.out.println(DB_MSQ_CONN_OK);
@@ -94,11 +95,11 @@ public class DBManager {
     }
 
     /**
-     * Cierra la conexi贸n con la base de datos
+     * Cierra la conexi髇 con la base de datos
      */
     public static void close() {
         try {
-            System.out.print("Cerrando la conexi贸n...");
+            System.out.print("Cerrando la conexi髇...");
             conn.close();
             System.out.println("OK!");
         } catch (SQLException ex) {
@@ -160,7 +161,7 @@ public class DBManager {
     }
 
     //////////////////////////////////////////////////
-    // M脡TODOS DE UN SOLO CLIENTE
+    // M蒚ODOS DE UN SOLO CLIENTE
     //////////////////////////////////////////////////
     ;
     
@@ -238,7 +239,7 @@ public class DBManager {
                 return;
             }
             
-            // Imprimimos su informaci贸n por pantalla
+            // Imprimimos su informaci髇 por pantalla
             int cid = rs.getInt(DB_CLI_ID);
             String nombre = rs.getString(DB_CLI_NOM);
             String direccion = rs.getString(DB_CLI_DIR);
@@ -285,7 +286,7 @@ public class DBManager {
      *
      * @param id id del cliente a modificar
      * @param nombre nuevo nombre del cliente
-     * @param direccion nueva direcci贸n del cliente
+     * @param direccion nueva direcci髇 del cliente
      * @return verdadero si pudo modificarlo, false en caso contrario
      */
     public static boolean updateCliente(int id, String nuevoNombre, String nuevaDireccion) {
