@@ -1,9 +1,9 @@
 package DbManager;
 
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ResultSet;
 
 /**
@@ -21,7 +21,7 @@ public class DBManager {
     private static final String DB_NAME = "tienda";
     private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?serverTimezone=UTC";
     private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
+    private static final String DB_PASS = "usuario";
     private static final String DB_MSQ_CONN_OK = "CONEXIÓN CORRECTA";
     private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXIÓN";
 
@@ -108,22 +108,20 @@ public class DBManager {
     }
 
     //////////////////////////////////////////////////
-    // MÃ‰TODOS DE TABLA CLIENTES
+    // MÉTODOS DE TABLA CLIENTES
     //////////////////////////////////////////////////
     ;
     
     // Devuelve 
-    // Los argumentos indican el tipo de ResultSet deseado
+    // Ya incluiomos el tipo de result set en el prepared statement
     /**
      * Obtiene toda la tabla clientes de la base de datos
-     * @param resultSetType Tipo de ResultSet
-     * @param resultSetConcurrency Concurrencia del ResultSet
-     * @return ResultSet (del tipo indicado) con la tabla, null en caso de error
+     * @return ResultSet con la tabla, null en caso de error
      */
-    public static ResultSet getTablaClientes(int resultSetType, int resultSetConcurrency) {
+    public static ResultSet getTablaClientes() {
         try {
-            Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
-            ResultSet rs = stmt.executeQuery(DB_CLI_SELECT);
+            PreparedStatement stmt=conn.prepareStatement(DB_CLI_SELECT,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery();
             //stmt.close();
             return rs;
         } catch (SQLException ex) {
@@ -134,20 +132,11 @@ public class DBManager {
     }
 
     /**
-     * Obtiene toda la tabla clientes de la base de datos
-     *
-     * @return ResultSet (por defecto) con la tabla, null en caso de error
-     */
-    public static ResultSet getTablaClientes() {
-        return getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-    }
-
-    /**
      * Imprime por pantalla el contenido de la tabla clientes
      */
     public static void printTablaClientes() {
         try {
-            ResultSet rs = getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+            ResultSet rs = getTablaClientes();
             while (rs.next()) {
                 int id = rs.getInt(DB_CLI_ID);
                 String n = rs.getString(DB_CLI_NOM);
@@ -173,10 +162,11 @@ public class DBManager {
     public static ResultSet getCliente(int id) {
         try {
             // Realizamos la consulta SQL
-            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String sql = DB_CLI_SELECT + " WHERE " + DB_CLI_ID + "='" + id + "';";
+        	String sql = DB_CLI_SELECT + " WHERE " + DB_CLI_ID + "=?;";
+        	PreparedStatement stmt=conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+        	stmt.setInt(1,id);
             //System.out.println(sql);
-            ResultSet rs = stmt.executeQuery(sql);
+            ResultSet rs = stmt.executeQuery();
             //stmt.close();
             
             // Si no hay primer registro entonces no existe el cliente
@@ -255,14 +245,14 @@ public class DBManager {
      * Solicita a la BD insertar un nuevo registro cliente
      *
      * @param nombre nombre del cliente
-     * @param direccion direcciÃ³n del cliente
+     * @param direccion dirección del cliente
      * @return verdadero si pudo insertarlo, false en caso contrario
      */
     public static boolean insertCliente(String nombre, String direccion) {
         try {
             // Obtenemos la tabla clientes
             System.out.print("Insertando cliente " + nombre + "...");
-            ResultSet rs = getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = getTablaClientes();
 
             // Insertamos el nuevo registro
             rs.moveToInsertRow();
@@ -310,7 +300,7 @@ public class DBManager {
                 System.out.println("OK!");
                 return true;
             } else {
-                System.out.println("ERROR. ResultSet vacÃ­o.");
+                System.out.println("ERROR. ResultSet vacío.");
                 return false;
             }
         } catch (SQLException ex) {
@@ -345,7 +335,7 @@ public class DBManager {
                 System.out.println("OK!");
                 return true;
             } else {
-                System.out.println("ERROR. ResultSet vacÃ­o.");
+                System.out.println("ERROR. ResultSet vacío.");
                 return false;
             }
 

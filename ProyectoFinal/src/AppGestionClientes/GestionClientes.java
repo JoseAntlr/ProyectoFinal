@@ -2,7 +2,6 @@ package AppGestionClientes;
 
 
 import java.util.Scanner;
-
 import DbManager.DBManager;
 
 /**
@@ -128,7 +127,7 @@ public class GestionClientes {
 
         // Solicitamos los nuevos datos
         String nombre = pideLinea("Nuevo nombre: ");
-        String direccion = pideLinea("Nueva direcciÃ³n: ");
+        String direccion = pideLinea("Nueva dirección: ");
 
         // Registramos los cambios
         boolean res = DBManager.updateCliente(id, nombre, direccion);
