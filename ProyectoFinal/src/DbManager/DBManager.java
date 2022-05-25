@@ -2,9 +2,15 @@ package DbManager;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.sql.ResultSet;
 
 /**
@@ -357,33 +363,120 @@ public class DBManager {
      * @return verdadero si pudo eliminarlo, false en caso contrario
      */
     public static boolean deleteCliente(int id) {
-        try {
-            System.out.print("Eliminando cliente " + id + "... ");
+    	try {
+    		System.out.print("Eliminando cliente " + id + "... ");
 
-            // Obtenemos el cliente
-            ResultSet rs = getCliente(id);
+    		// Obtenemos el cliente
+    		ResultSet rs = getCliente(id);
 
-            // Si no existe el Resultset
-            if (rs == null) {
-                System.out.println("ERROR. ResultSet null.");
-                return false;
-            }
+    		// Si no existe el Resultset
+    		if (rs == null) {
+    			System.out.println("ERROR. ResultSet null.");
+    			return false;
+    		}
 
-            // Si existe y tiene primer registro, lo eliminamos
-            if (rs.first()) {
-                rs.deleteRow();
-                rs.close();
-                System.out.println("OK!");
-                return true;
-            } else {
-                System.out.println("ERROR. ResultSet vacío.");
-                return false;
-            }
+    		// Si existe y tiene primer registro, lo eliminamos
+    		if (rs.first()) {
+    			rs.deleteRow();
+    			rs.close();
+    			System.out.println("OK!");
+    			return true;
+    		} else {
+    			System.out.println("ERROR. ResultSet vacío.");
+    			return false;
+    		}
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
+    	} catch (SQLException ex) {
+    		ex.printStackTrace();
+    		return false;
+    	}
     }
 
+    public static void volcarAFichero(String archivo) {
+
+    	File rutadatos=new File("VolcadoDatos/"+archivo+".txt");
+    	ResultSet datos = getTablaClientes();
+    	try {
+
+    		FileWriter datosvolcados=new FileWriter(rutadatos);
+    		datosvolcados.write(DB_NAME+" "+DB_CLI+"\n");
+    		datosvolcados.write(DB_CLI_ID+" "+DB_CLI_NOM+" "+DB_CLI_DIR+"\n");
+
+    		while(datos.next()) {
+
+    			int id = datos.getInt(DB_CLI_ID);
+    			String n = datos.getString(DB_CLI_NOM);
+    			String d = datos.getString(DB_CLI_DIR);
+    			datosvolcados.write(id+" "+n+" "+d+"\n");
+    			
+    		}
+
+
+    		datosvolcados.close();
+    	}
+    	catch (SQLException e1) {
+    		// TODO Auto-generated catch block
+    		e1.printStackTrace();
+    	} 
+    	catch (IOException e) {
+
+    		e.printStackTrace();
+    	}
+    }
+    
+     public static void insertarDesdeFichero(String archivo) {
+    	
+    	File datosInsertar=new File("VolcadoDatos/"+archivo+".txt");
+    	String tabla;
+    	try {
+    		
+			Scanner lector=new Scanner (datosInsertar);
+			lector.nextLine();
+			lector.nextLine();
+			lector.nextLine();
+			
+			while(lector.hasNext()) {
+			String datosleidos=lector.nextLine();
+			String[] datosseparados=datosleidos.split(" ");
+			insertCliente(datosseparados[0], datosseparados[1]);
+			}
+			lector.close();
+			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
+    public static void borrarDesdeFichero(String archivo) {
+    	
+    	File datosInsertar=new File("VolcadoDatos/"+archivo+".txt");
+    	
+    	try {
+    		
+			Scanner lector=new Scanner (datosInsertar);
+			lector.nextLine();
+			lector.nextLine();
+			lector.nextLine();
+			
+			while(lector.hasNext()) {
+			String datosleidos=lector.nextLine();
+			String[] datosseparados=datosleidos.split(" ");
+			int id=Integer.parseInt(datosseparados[0]);
+			deleteCliente(id);
+			}
+			lector.close();
+			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    
+   
+    
 }

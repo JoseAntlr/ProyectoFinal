@@ -34,7 +34,10 @@ public class GestionClientes {
         System.out.println("3. Modificar cliente");
         System.out.println("4. Eliminar cliente");
         System.out.println("5. Filtrar clientes por ciudad (Callable Statement)");
-        System.out.println("6. Salir");
+        System.out.println("6. Volcar datos a fichero");
+        System.out.println("7. Insertar datos desde fichero");
+        System.out.println("8. Borrar datos desde fichero");
+        System.out.println("9. Salir");
         
         Scanner in = new Scanner(System.in);
             
@@ -57,7 +60,16 @@ public class GestionClientes {
             	opcionFiltrarPorCiudad();
                 return false;
             case 6:
-                return true;
+            	opcionVolcarAFichero();
+                return false;
+            case 7:
+            	opcionInsertarFichero();
+            	return false;
+            case 8:
+            	opcionBorrarDesdeFichero();
+            	return false;
+            case 9:
+            	return true;
             default:
                 System.out.println("Opción elegida incorrecta");
                 return false;
@@ -172,5 +184,27 @@ public class GestionClientes {
 
     }
     
+    public static void opcionVolcarAFichero() {
+    	
+    	Scanner in = new Scanner(System.in);
+        String archivo = pideLinea("Introduce el nombre del archivo destino (sin extension):");
+        DBManager.volcarAFichero(archivo);
+    	
+    }
     
+    public static void opcionInsertarFichero() {
+    	
+    	Scanner in = new Scanner(System.in);
+        String archivo = pideLinea("Introduce el nombre del archivo del que insertar (sin extension):");
+        DBManager.insertarDesdeFichero(archivo);
+    	
+    }
+    
+    public static void opcionBorrarDesdeFichero() {
+    	
+    	Scanner in = new Scanner(System.in);
+        String archivo = pideLinea("Introduce el nombre del archivo del que borrar (sin extension):");
+        DBManager.borrarDesdeFichero(archivo);
+    	
+    }
 }
