@@ -2,6 +2,7 @@ package DbManager;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.ResultSet;
@@ -130,7 +131,47 @@ public class DBManager {
         }
 
     }
+    
+    /**
+     * Filtra los clientes de la base de datos segun la ciudad indicada
+     * @param ciudad 
+     * @return ResultSet con el resultado de la consulta, null en caso de error
+     */
+    
+    public static void  filtrarPorCiudad(String ciudad) {
+    	
+    	try {
+    		
+			CallableStatement proc=conn.prepareCall("{call FiltrarPorCiudad(?)}");
+			proc.setString(1,ciudad);
+			proc.execute();
+			ResultSet resultado=proc.getResultSet();
+			
+			if(resultado.isBeforeFirst()) {
+				
+				while(resultado.next()) {
+					
+					 int id = resultado.getInt(DB_CLI_ID);
+		                String n = resultado.getString(DB_CLI_NOM);
+		                String d = resultado.getString(DB_CLI_DIR);
+		                System.out.println(id + "\t" + n + "\t" + d);
+				}
+				
+				
+			}else {
+				
+				System.out.println("No existe la ciudad en la base de datos");
+				
+			}
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
 
+		}
+    	
+    }
+    
     /**
      * Imprime por pantalla el contenido de la tabla clientes
      */
