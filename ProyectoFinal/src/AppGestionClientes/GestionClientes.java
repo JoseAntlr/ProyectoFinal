@@ -5,11 +5,16 @@ import java.util.Scanner;
 import DbManager.DBManager;
 
 /**
- *
+ *Clase que presenta el menu y pide los parametros necesarios
  * @author Jose Antonio López Romero
+ * 
  */
 public class GestionClientes {
 
+	/**
+	 * Metodo main para ejecutar el menu
+	 * @param args Menu principal de la gestion de la base de datos
+	 */
     public static void main(String[] args) {
 
         DBManager.loadDriver();

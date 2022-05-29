@@ -13,7 +13,7 @@ import java.util.Scanner;
 import java.sql.ResultSet;
 
 /**
- *
+ *Clase para realizar las gestiones y consultas con la base de datos
  * @author Jose Antonio López Romero
  */
 public class DBManager {
@@ -139,8 +139,7 @@ public class DBManager {
     
     /**
      * Filtra los clientes de la base de datos segun la ciudad indicada
-     * @param ciudad 
-     * @return ResultSet con el resultado de la consulta, null en caso de error
+     * @param ciudad Ciudad por la que queremos filtrar
      */
     
     public static void  filtrarPorCiudad(String ciudad) {
@@ -321,8 +320,8 @@ public class DBManager {
      * Solicita a la BD modificar los datos de un cliente
      *
      * @param id id del cliente a modificar
-     * @param nombre nuevo nombre del cliente
-     * @param direccion nueva dirección del cliente
+     * @param nuevoNombre nuevo nombre del cliente
+     * @param nuevaDireccion nueva dirección del cliente
      * @return verdadero si pudo modificarlo, false en caso contrario
      */
     public static boolean updateCliente(int id, String nuevoNombre, String nuevaDireccion) {
@@ -397,25 +396,24 @@ public class DBManager {
      * */
     public static void volcarAFichero(String archivo) {
 
-    	File rutadatos=new File("VolcadoDatos/"+archivo+".txt");
+    	File rutadatos=new File("Archivos/"+archivo+".txt");
     	ResultSet datos = getTablaClientes();
     	try {
 
-    		FileWriter datosvolcados=new FileWriter(rutadatos);
-    		datosvolcados.write(DB_NAME+" "+DB_CLI+"\n");
-    		datosvolcados.write(DB_CLI_ID+" "+DB_CLI_NOM+" "+DB_CLI_DIR+"\n");
+    		FileWriter escritor=new FileWriter(rutadatos);
+    		escritor.write(DB_NAME+" "+DB_CLI+"\n");
+    		escritor.write(DB_CLI_ID+" "+DB_CLI_NOM+" "+DB_CLI_DIR+"\n");
 
     		while(datos.next()) {
 
     			int id = datos.getInt(DB_CLI_ID);
     			String n = datos.getString(DB_CLI_NOM);
     			String d = datos.getString(DB_CLI_DIR);
-    			datosvolcados.write(id+" "+n+" "+d+"\n");
+    			escritor.write(id+" "+n+" "+d+"\n");
     			
     		}
 
-
-    		datosvolcados.close();
+    		escritor.close();
     	}
     	catch (SQLException e1) {
     		
@@ -435,12 +433,11 @@ public class DBManager {
      */
      public static void insertarDesdeFichero(String archivo) {
     	
-    	File datosInsertar=new File("VolcadoDatos/"+archivo+".txt");
+    	File datosInsertar=new File("Archivos/"+archivo+".txt");
     	String tabla;
     	try {
     		
 			Scanner lector=new Scanner (datosInsertar);
-			lector.nextLine();
 			lector.nextLine();
 			lector.nextLine();
 			
@@ -468,20 +465,22 @@ public class DBManager {
       */
     public static void borrarDesdeFichero(String archivo) {
     	
-    	File datosInsertar=new File("VolcadoDatos/"+archivo+".txt");
+    	File datosInsertar=new File("Archivos/"+archivo+".txt");
     	
     	try {
     		
 			Scanner lector=new Scanner (datosInsertar);
 			lector.nextLine();
 			lector.nextLine();
-			lector.nextLine();
 			
 			while(lector.hasNext()) {
 			String datosleidos=lector.nextLine();
 			String[] datosseparados=datosleidos.split(" ");
-			int id=Integer.parseInt(datosseparados[0]);
-			deleteCliente(id);
+			
+			for(int i=0;i<datosseparados.length;i++) {
+				deleteCliente(Integer.parseInt(datosseparados[i]));
+			}
+			
 			}
 			lector.close();
 			
@@ -501,12 +500,11 @@ public class DBManager {
      */
     public static void actualizarDesdeFichero(String archivo) {
     	
-    	File datosActualizar=new File("VolcadoDatos/"+archivo+".txt");
+    	File datosActualizar=new File("Archivos/"+archivo+".txt");
     	
     	try {
     		
 			Scanner lector=new Scanner (datosActualizar);
-			lector.nextLine();
 			lector.nextLine();
 			lector.nextLine();
 			
@@ -517,7 +515,6 @@ public class DBManager {
 			updateCliente(id, datosseparados[1], datosseparados[2]);
 			}
 			lector.close();
-			
 			
 		} catch (FileNotFoundException e) {
 			
@@ -552,7 +549,6 @@ public class DBManager {
     	
     }
     
-    
     /**
      * Hace una busqueda segun el nombre de una fila de la tabla
      * @param nombreFila Nombre de la fila por la que queremos filtrar
@@ -573,9 +569,8 @@ public class DBManager {
 				
 			}
 			
-			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
     	
