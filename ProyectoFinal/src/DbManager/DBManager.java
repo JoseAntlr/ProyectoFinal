@@ -1,5 +1,4 @@
 package DbManager;
-
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.io.File;
@@ -392,6 +391,10 @@ public class DBManager {
     	}
     }
 
+    /**
+     * Escribe la tabla de la base de datos en un fichero indicado
+     * @param archivo Nombre del archivo vonde volcaremos los datos
+     * */
     public static void volcarAFichero(String archivo) {
 
     	File rutadatos=new File("VolcadoDatos/"+archivo+".txt");
@@ -415,7 +418,7 @@ public class DBManager {
     		datosvolcados.close();
     	}
     	catch (SQLException e1) {
-    		// TODO Auto-generated catch block
+    		
     		e1.printStackTrace();
     	} 
     	catch (IOException e) {
@@ -424,6 +427,12 @@ public class DBManager {
     	}
     }
     
+    
+    /**
+     * Inserta registros en la tabla desde un archivo
+     * @param archivo Nombre del archivo de donde insertamos
+     * 
+     */
      public static void insertarDesdeFichero(String archivo) {
     	
     	File datosInsertar=new File("VolcadoDatos/"+archivo+".txt");
@@ -444,11 +453,19 @@ public class DBManager {
 			
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
     	
     }
+     
+     
+     
+     /**
+      * Borra los registros indicados en un archivo
+      * @param archivo Nombre del archivo de donde extraemos los que borrar
+      * 
+      */
     public static void borrarDesdeFichero(String archivo) {
     	
     	File datosInsertar=new File("VolcadoDatos/"+archivo+".txt");
@@ -470,13 +487,98 @@ public class DBManager {
 			
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
     	
     }
     
     
+    /**
+     * Inserta actualiza los campos de las tablas desde un archivo
+     * @param archivo Nombre del archivo de donde extraemos los datos
+     * 
+     */
+    public static void actualizarDesdeFichero(String archivo) {
+    	
+    	File datosActualizar=new File("VolcadoDatos/"+archivo+".txt");
+    	
+    	try {
+    		
+			Scanner lector=new Scanner (datosActualizar);
+			lector.nextLine();
+			lector.nextLine();
+			lector.nextLine();
+			
+			while(lector.hasNext()) {
+			String datosleidos=lector.nextLine();
+			String[] datosseparados=datosleidos.split(" ");
+			int id=Integer.parseInt(datosseparados[0]);
+			updateCliente(id, datosseparados[1], datosseparados[2]);
+			}
+			lector.close();
+			
+			
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		}
+    	
+    }
    
+    
+    /**
+     * Inserta una nueva tabla con dos campos en la base de datos
+     * @param nombreTabla Nombre de la tabla que vamos a crear
+     * @param campo1 Nombre del primer campo de la nueva tabla
+     * @param campo2 Nombre del segundo campo de la nueva tabla
+     * 
+     */
+    
+    public static void insertarTabla(String nombreTabla,String campo1, String campo2) {
+    	
+    	String nuevatabla="create table "+nombreTabla+" ( "+campo1+" varchar(20), "+campo2+" varchar(20))";
+    	
+    	try {
+			PreparedStatement stmt=conn.prepareStatement(nuevatabla);
+			stmt.executeUpdate();
+			
+			
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    
+    /**
+     * Hace una busqueda segun el nombre de una fila de la tabla
+     * @param nombreFila Nombre de la fila por la que queremos filtrar
+     * 
+     */
+    public static void filtrarFilas(String nombreFila) {
+    	
+    	String filaseleccionada="select "+nombreFila+" from "+DB_CLI;
+    	
+    	try {
+			PreparedStatement stmt=conn.prepareStatement(filaseleccionada);
+			ResultSet rs=stmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				String fila=rs.getString(nombreFila);
+				System.out.println(fila);
+				
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    }
     
 }

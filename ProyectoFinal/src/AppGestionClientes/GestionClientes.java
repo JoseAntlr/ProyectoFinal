@@ -26,6 +26,10 @@ public class GestionClientes {
     
     //Funcion con el menu principal
 
+    /**
+     * Menu principal donde se ofrecen las diferentes opciones para trabajar con la base de datos
+     * @return false si seguimos en el menu, true si le damos a salir
+     */
     public static boolean menuPrincipal() {
         System.out.println("");
         System.out.println("MENU PRINCIPAL");
@@ -37,7 +41,10 @@ public class GestionClientes {
         System.out.println("6. Volcar datos a fichero");
         System.out.println("7. Insertar datos desde fichero");
         System.out.println("8. Borrar datos desde fichero");
-        System.out.println("9. Salir");
+        System.out.println("9. Actualizar datos desde fichero");
+        System.out.println("10. Crear una nueva tabla");
+        System.out.println("11. Filtrar por filas");
+        System.out.println("0. Salir");
         
         Scanner in = new Scanner(System.in);
             
@@ -69,6 +76,18 @@ public class GestionClientes {
             	opcionBorrarDesdeFichero();
             	return false;
             case 9:
+            	opcionActualizarDesdeFichero();
+            	return false;
+            	
+            case 10:
+            	opcionCrearNuevaTabla();
+            	return false;
+            	
+            case 11:
+            	opcionFiltrarFilas();
+            	return false;
+            	
+            case 0:
             	return true;
             default:
                 System.out.println("Opción elegida incorrecta");
@@ -77,6 +96,12 @@ public class GestionClientes {
         
     }
     
+    
+    /**
+     * Metodo para pedir numeros enteros por teclado
+     * @param mensaje String que sera convertido a entero
+     * @return devuelve un entero 
+     */
     public static int pideInt(String mensaje){
         
         while(true) {
@@ -92,6 +117,11 @@ public class GestionClientes {
         }
     }
     
+    /**
+     * Metodo para pedir palabras por teclado
+     * @param mensaje Palabras introducidas por teclado
+     * @return cadena de texto introducida por teclado
+     */
     public static String pideLinea(String mensaje){
         
         while(true) {
@@ -106,11 +136,17 @@ public class GestionClientes {
         }
     }
 
+    /**
+     * Metodo del menu que muestra la tabla de clientes
+     */
     public static void opcionMostrarClientes() {
         System.out.println("Listado de Clientes:");
         DBManager.printTablaClientes();
     }
 
+    /**
+     * Metodo que pide los valores y crea un nuevo cliente en la base de datos
+     */
     public static void opcionNuevoCliente() {
         Scanner in = new Scanner(System.in);
 
@@ -127,6 +163,10 @@ public class GestionClientes {
         }
     }
 
+    
+    /**
+     * Metodo para modificar los valores de los clientes en la base de datos
+     */
     public static void opcionModificarCliente() {
         Scanner in = new Scanner(System.in);
 
@@ -155,6 +195,10 @@ public class GestionClientes {
         }
     }
 
+    
+    /**
+     * Metodo para eliminar un cliente de la base de datos
+     */
     public static void opcionEliminarCliente() {
         Scanner in = new Scanner(System.in);
 
@@ -176,7 +220,11 @@ public class GestionClientes {
         }
     }
     
+    /**
+     * Metodo para usar el procedimiento almacenado de filtrar por ciudad de la base de datos
+     */
     public static void opcionFiltrarPorCiudad() {
+    	
         Scanner in = new Scanner(System.in);
         String ciudad = pideLinea("Introduce el nombre de la ciudad:");
         
@@ -184,6 +232,9 @@ public class GestionClientes {
 
     }
     
+    /**
+     * Metodo para volcar los datos de la base de datos a un fichero
+     */
     public static void opcionVolcarAFichero() {
     	
     	Scanner in = new Scanner(System.in);
@@ -192,6 +243,9 @@ public class GestionClientes {
     	
     }
     
+    /**
+     * Metodo para insertar clientes desde un archivo
+     */
     public static void opcionInsertarFichero() {
     	
     	Scanner in = new Scanner(System.in);
@@ -200,6 +254,9 @@ public class GestionClientes {
     	
     }
     
+    /**
+     * Metodo para borrar registros de la base de datos desde un archivo
+     */
     public static void opcionBorrarDesdeFichero() {
     	
     	Scanner in = new Scanner(System.in);
@@ -207,4 +264,43 @@ public class GestionClientes {
         DBManager.borrarDesdeFichero(archivo);
     	
     }
+    
+    /**
+     * Metodo para actualizar registros de la base de datos desde un archivo
+     */
+    public static void opcionActualizarDesdeFichero() {
+    	
+    	Scanner in = new Scanner(System.in);
+        String archivo = pideLinea("Introduce el nombre del archivo del que borrar (sin extension):");
+        DBManager.actualizarDesdeFichero(archivo);
+    	
+    }
+    
+    /**
+     * Metodo para crear una nueva tabla con dos campos
+     */
+    public static void opcionCrearNuevaTabla() {
+    	
+    	Scanner in = new Scanner(System.in);
+        String nombretabla = pideLinea("Introduce el nombre de la nueva tabla:");
+        String campo1 = pideLinea("Introduce el nombre del campo 1:");
+        String campo2 = pideLinea("Introduce el nombre del campo 2:");
+        
+        DBManager.insertarTabla(nombretabla, campo1, campo2);
+        
+    	
+    }
+    
+    /**
+     * Metodo para filtrar por una fila en la base de datos
+     */
+    public static void opcionFiltrarFilas() {
+    	
+    	Scanner in = new Scanner(System.in);
+        String fila = pideLinea("Introduce el nombre de la fila por la que filtrar:");    
+        DBManager.filtrarFilas(fila);
+        
+    	
+    }
+    
 }
