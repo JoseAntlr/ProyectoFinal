@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 
 /**
  *
- * @author Jose Antonio L�pez Romero, yo
+ * @author Jose Antonio L�pez Romero
  */
 public class DBManager {
 
