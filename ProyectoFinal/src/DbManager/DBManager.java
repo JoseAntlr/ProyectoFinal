@@ -8,24 +8,24 @@ import java.sql.ResultSet;
 
 /**
  *
- * @author Jose Antonio López Romero
+ * @author Jose Antonio Lï¿½pez Romero, yo
  */
 public class DBManager {
 
-    // Conexión a la base de datos
+    // Conexiï¿½n a la base de datos
     private static Connection conn = null;
 
-    // Configuración de la conexión a la base de datos
+    // Configuraciï¿½n de la conexiï¿½n a la base de datos
     private static final String DB_HOST = "localhost";
     private static final String DB_PORT = "3306";
     private static final String DB_NAME = "tienda";
     private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?serverTimezone=UTC";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "usuario";
-    private static final String DB_MSQ_CONN_OK = "CONEXIÓN CORRECTA";
-    private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXIÓN";
+    private static final String DB_MSQ_CONN_OK = "CONEXIï¿½N CORRECTA";
+    private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXIï¿½N";
 
-    // Configuración de la tabla Clientes
+    // Configuraciï¿½n de la tabla Clientes
     private static final String DB_CLI = "clientes";
     private static final String DB_CLI_SELECT = "SELECT * FROM " + DB_CLI;
     private static final String DB_CLI_ID = "id";
@@ -33,7 +33,7 @@ public class DBManager {
     private static final String DB_CLI_DIR = "direccion";
 
     //////////////////////////////////////////////////
-    // MÉTODOS DE CONEXIÓN A LA BASE DE DATOS
+    // Mï¿½TODOS DE CONEXIï¿½N A LA BASE DE DATOS
     //////////////////////////////////////////////////
     ;
     
@@ -74,12 +74,12 @@ public class DBManager {
     }
 
     /**
-     * Comprueba la conexión y muestra su estado por pantalla
+     * Comprueba la conexiï¿½n y muestra su estado por pantalla
      *
-     * @return true si la conexión existe y es válida, false en caso contrario
+     * @return true si la conexiï¿½n existe y es vï¿½lida, false en caso contrario
      */
     public static boolean isConnected() {
-        // Comprobamos estado de la conexión
+        // Comprobamos estado de la conexiï¿½n
         try {
             if (conn != null && conn.isValid(0)) {
                 System.out.println(DB_MSQ_CONN_OK);
@@ -95,11 +95,11 @@ public class DBManager {
     }
 
     /**
-     * Cierra la conexión con la base de datos
+     * Cierra la conexiï¿½n con la base de datos
      */
     public static void close() {
         try {
-            System.out.print("Cerrando la conexión...");
+            System.out.print("Cerrando la conexiï¿½n...");
             conn.close();
             System.out.println("OK!");
         } catch (SQLException ex) {
@@ -108,7 +108,7 @@ public class DBManager {
     }
 
     //////////////////////////////////////////////////
-    // MÉTODOS DE TABLA CLIENTES
+    // Mï¿½TODOS DE TABLA CLIENTES
     //////////////////////////////////////////////////
     ;
     
@@ -150,7 +150,7 @@ public class DBManager {
     }
 
     //////////////////////////////////////////////////
-    // MÉTODOS DE UN SOLO CLIENTE
+    // Mï¿½TODOS DE UN SOLO CLIENTE
     //////////////////////////////////////////////////
     ;
     
@@ -229,7 +229,7 @@ public class DBManager {
                 return;
             }
             
-            // Imprimimos su información por pantalla
+            // Imprimimos su informaciï¿½n por pantalla
             int cid = rs.getInt(DB_CLI_ID);
             String nombre = rs.getString(DB_CLI_NOM);
             String direccion = rs.getString(DB_CLI_DIR);
@@ -245,7 +245,7 @@ public class DBManager {
      * Solicita a la BD insertar un nuevo registro cliente
      *
      * @param nombre nombre del cliente
-     * @param direccion dirección del cliente
+     * @param direccion direcciï¿½n del cliente
      * @return verdadero si pudo insertarlo, false en caso contrario
      */
     public static boolean insertCliente(String nombre, String direccion) {
@@ -276,7 +276,7 @@ public class DBManager {
      *
      * @param id id del cliente a modificar
      * @param nombre nuevo nombre del cliente
-     * @param direccion nueva dirección del cliente
+     * @param direccion nueva direcciï¿½n del cliente
      * @return verdadero si pudo modificarlo, false en caso contrario
      */
     public static boolean updateCliente(int id, String nuevoNombre, String nuevaDireccion) {
@@ -300,7 +300,7 @@ public class DBManager {
                 System.out.println("OK!");
                 return true;
             } else {
-                System.out.println("ERROR. ResultSet vacío.");
+                System.out.println("ERROR. ResultSet vacï¿½o.");
                 return false;
             }
         } catch (SQLException ex) {
@@ -335,7 +335,7 @@ public class DBManager {
                 System.out.println("OK!");
                 return true;
             } else {
-                System.out.println("ERROR. ResultSet vacío.");
+                System.out.println("ERROR. ResultSet vacï¿½o.");
                 return false;
             }
 
